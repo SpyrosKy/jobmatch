@@ -27,7 +27,7 @@ app.use(
   session({
     secret: process.env.SESSION_SECRET,
     saveUninitialized: true,
-    resave: true
+    resave: true,
   })
 );
 
@@ -40,12 +40,10 @@ app.use(flash());
 // expose flash message to the hbs templates, if any flash-message is defined
 //app.use(require("./middlewares/exposeFlashMessage"));
 
-
 /* expose login status to the hbs templates */
 
 // let's set every user as admin for the inital dev phase
 //app.use(require("./middlewares/exposeLoginStatus"));
-
 
 // BELOW => DEV MODE !!!!! TO AVOID LOGIN/LOGOUT INFERNO
 
@@ -56,15 +54,12 @@ app.use(flash());
 //   avatar: "https://payload143.cargocollective.com/1/2/66133/5178589/url.gif"
 // }
 
-
-
 // ROUTING
 app.use("/", require("./routes"));
-// app.use("/auth", require("./routes/auth"));
-// app.use("/albums", require("./routes/albums"));
-// app.use("/artists", require("./routes/artists"));
-// app.use("/labels", require("./routes/labels"));
-// app.use("/styles", require("./routes/styles"));
+app.use("/entreprises", require("./routes/entreprise"));
+app.use("/missions", require("./routes/mission"));
+app.use("/users", require("./routes/users"));
+
 
 // export the app (check the import @ ./bin/www)
 module.exports = app;
