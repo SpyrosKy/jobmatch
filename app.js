@@ -1,43 +1,70 @@
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+require("dotenv").config();
+require("./config/mongodb");
+require("./helpers/hbs"); // custom functions adding features to hbs templates
+
+// DEPENDENCIES
+const express = require("express");
+const app = express();
 const hbs = require("hbs");
+const path = require("path");
+const flash = require("connect-flash"); // designed to keep messages between 2 http request/response cycles
+const session = require("express-session");
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+// INITAL CONFIG
 
-var app = express();
+// POST BODY PARSER
+app.use(express.urlencoded({ extended: true })); // parse posted data
+app.use(express.json()); // ajax ready
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'hbs');
-hbs.registerPartials(path.join(__dirname + "/views/Partials"));
+// TEMPLATING
+app.use(express.static(path.join(__dirname, "public"))); // static files (public for browsers)
+app.set("views", path.join(__dirname, "views")); // wahre are the pages ?
+app.set("view engine", "hbs"); // which template engine
+hbs.registerPartials(path.join(__dirname, "views/partials")); // where are the tiny chunks of views ?
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+// INITIALIZE SESSION
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: true,
+    resave: true
+  })
+);
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
+// FLASH MESSAGES
+// enable "flash messaging" system
+// it depends on the express-session mechanism
+app.use(flash());
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404));
-});
+// CUSTOM MIDDLEWARES
+// expose flash message to the hbs templates, if any flash-message is defined
+//app.use(require("./middlewares/exposeFlashMessage"));
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+/* expose login status to the hbs templates */
 
+// let's set every user as admin for the inital dev phase
+//app.use(require("./middlewares/exposeLoginStatus"));
+
+
+// BELOW => DEV MODE !!!!! TO AVOID LOGIN/LOGOUT INFERNO
+
+// app.locals.isLoggedIn = true;
+// app.locals.isAdmin = true;
+// app.locals.currentUser = {
+//   email: "foo@bar.baz",
+//   avatar: "https://payload143.cargocollective.com/1/2/66133/5178589/url.gif"
+// }
+
+
+
+// ROUTING
+app.use("/", require("./routes"));
+// app.use("/auth", require("./routes/auth"));
+// app.use("/albums", require("./routes/albums"));
+// app.use("/artists", require("./routes/artists"));
+// app.use("/labels", require("./routes/labels"));
+// app.use("/styles", require("./routes/styles"));
+
+// export the app (check the import @ ./bin/www)
 module.exports = app;
