@@ -6,8 +6,18 @@ router.get("/", (req, res, next) => {
   res.render("index");
 });
 
-router.get("/missions", (req, res, next) => {
-  res.render("missions");
+router.get('/signin', (req, res, next) =>{
+  res.render('signin');
+});
+
+
+
+router.get('/signup', (req, res, next) =>{
+  res.render('signup');
+});
+
+router.get('/missions', (req, res, next) =>{
+  res.render('missions');
 });
 
 module.exports = router;

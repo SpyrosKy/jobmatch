@@ -8,8 +8,8 @@ const app = express();
 const hbs = require("hbs");
 const path = require("path");
 const flash = require("connect-flash");
+const dev_mode = true; // designed to keep messages between 2 http request/response cycles
 const session = require("express-session");
-const dev_mode = true;
 
 // POST BODY PARSER
 app.use(express.urlencoded({ extended: true }));
@@ -43,9 +43,23 @@ app.use(require("./middlewares/exposeFlashMessage"));
 
 // ROUTING
 app.use("/", require("./routes"));
-/* app.use("/entreprises", require("./routes/entreprise"));
+app.use("/entreprises", require("./routes/entreprise"));
 app.use("/missions", require("./routes/mission")); */
 app.use("/users", require("./routes/users"));
-app.use("/auth", require("./routes/auth"));
+// app.use("/auth", require("./routes/auth"));
+
+// app.locals.isLoggedIn = true;
+// app.locals.isAdmin = true;
+// app.locals.currentUser = {
+//   email: "foo@bar.baz",
+//   avatar: "https://payload143.cargocollective.com/1/2/66133/5178589/url.gif"
+// }
+
+// ROUTING
+app.use("/", require("./routes"));
+app.use("/entreprises", require("./routes/entreprises"));
+app.use("/missions", require("./routes/missions"));
+//("/", require("./routes/auth"))
+//app.use("/users", require("./routes/users"));
 
 module.exports = app;

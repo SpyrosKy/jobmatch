@@ -1,13 +1,9 @@
 module.exports = function devMode(req, res, next) {
   req.session.currentUser = {
-    _id: "5f0c661bc92bd62edc5f5362", // change the user id here to fit your needs
-    role: "user",
-    firstname: "chakib",
-    lastname: "B",
-    email: "aa@bb.com",
-    password: "123",
-    category: "sommelier",
-    role: "user",
+     _id: "5f0c8011cb244cf30b9f9926", // change the user id here to fit yor needs
+    name:"spyros",
+    role: "entreprise",
+    email: "spyros@spyros.com",
   };
   next();
 };
