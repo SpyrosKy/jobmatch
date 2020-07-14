@@ -72,7 +72,10 @@ router.get("/update/:id", (req, res, next) => {
 });
 
 router.post("/update/:id", (req, res, next) => {
-  userModel.findByIdAndUpdate(req.params.id, formatUserInfos(req.body));
+  userModel
+    .findByIdAndUpdate(req.params.id, formatUserInfos(req.body))
+    .then(() => res.redirect("/users/" + req.params.id))
+    .catch(next);
 });
 
 router.get("/:id/missions", (req, res, next) => {

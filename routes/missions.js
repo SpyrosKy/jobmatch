@@ -5,19 +5,15 @@ const entrepriseModel = require("../models/entreprisemodel");
 
 router.get("/create/:id", async (req, res) => {
   try {
-
-      res.render("missions/create", { idEntreprise: req.params.id});
-
+    res.render("missions/create", { idEntreprise: req.params.id });
   } catch (err) {
     next(err);
   }
 });
 
-
 router.post("/create/:id", (req, res, next) => {
-    const entreprise = req.params.id;
-    console.log(entreprise);
-
+  const entreprise = req.params.id;
+  console.log(entreprise);
 
   const { category, description, location, date_deb, date_fin } = req.body;
 
@@ -29,14 +25,36 @@ router.post("/create/:id", (req, res, next) => {
       date_deb,
       date_fin,
 
-      entreprise
+      entreprise,
     })
     .then((newMission) => {
       console.log(newMission);
       req.flash("success", "Mission successfully created");
       res.redirect(`/entreprises/profil/${newMission.entreprise}`);
-
     })
+    .catch(next);
+});
+
+router.get("/:id", (req, res, next) => {
+  // Get Details of 1 mission
+  missionModel
+    .findById(req.params.id)
+    .then((missionDetail) =>
+      res.render("missions/oneMission", { missionDetail })
+    )
+    .catch(next);
+});
+
+router.get("/update/:id", (req, res, next) => {
+  missionModel
+    .findById(req.params.id)
+    .then((updateMission) => res.render("missions/update", { updateMission }))
+    .catch(next);
+});
+router.post("/update/:id", (req, res, next) => {
+  missionModel
+    .findByIdAndUpdate(req.params.id, req.body)
+    .then(() => res.redirect("/entreprises/profil/" + req.params.id))
     .catch(next);
 });
 
