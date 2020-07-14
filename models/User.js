@@ -45,9 +45,10 @@ const userSchema = new Schema({
     type: String,
     //required: true,
   },
-  cityname: {
-    type: String,
-    // required: true,
+  address: {
+    street: String,
+    city: String,
+    zipcode: Number,
   },
   price: Number,
   rateavg: Number,
