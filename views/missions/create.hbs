@@ -1,0 +1,59 @@
+<div class="row">
+
+    <div class="col-md-4 offset-md-4">
+
+        <h1>Create a Mission</h1>
+
+    </div>
+
+    <div class="col-md-4 offset-md-4">
+        <form action="/missions/create" method="post">
+            <div class="form-group">
+                <label for="inputCategory">Category</label>
+                <select name="category" id="inputCategory" class="form-control">
+                    <option>...</option>
+                    <option value="bartender">Bar</option>
+                    <option value="housekeeper">Housekeeping</option>
+                    <option value="receptionist">Reception</option>
+                    <option value="waiter">Waiter</option>
+                    <option value="chef">Chef</option>
+                    <option value="sommelier">Sommelier</option>
+                    <option value="manager">Manager</option>
+                </select>
+            </div>
+
+            <div class="form-raw">
+
+                <div class="form-group">
+
+                    <label for="location">location</label>
+                    <input type="text" name="location" class="form-control" id="location" value="">
+
+                </div>
+            </div>
+
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="date_deb">From:</label>
+                    <input type="date" name="date_deb" class="form-control" id="date_deb">
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="date_fin">To:</label>
+                    <input type="date" name="date_fin" class="form-control" id="date_fin">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">Description</label>
+                <textarea class="form-control" name="description" id="description" rows="3"></textarea>
+            </div>
+
+
+
+            <button type="submit" class="btn btn-primary">Create Mission</button>
+        </form>
+
+    </div>
+</div>

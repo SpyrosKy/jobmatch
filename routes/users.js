@@ -13,6 +13,10 @@ router.get("/all", (req, res, next) => {
     .catch(next);
 });
 
+router.get("/new", (req, res) => {
+  res.render("signup");
+});
+
 router.post("/new", (req, res, next) => {
   const { firstname, lastname, category, email, password, cityname } = req.body;
 
@@ -33,10 +37,10 @@ router.post("/new", (req, res, next) => {
     .catch(next);
 });
 
-router.get("/:id", (req, res, next) => {
+router.get("/user-profile/:id", (req, res, next) => {
   userModel
     .findById(req.params.id)
-    .then((user) => res.render("users/user-profile", { user }))
+    .then((user) => res.render("users/user-profile", {user} ))
     .catch(next);
 });
 

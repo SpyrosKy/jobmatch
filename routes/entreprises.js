@@ -63,6 +63,8 @@ router.post("/signupEnt", (req, res, next) => {
     })
     .catch(next);
 });
+
+
 router.get("/profil/:id", async (req, res) => {
   try {
     const profil = await entrepriseModel.findById(req.params.id)
