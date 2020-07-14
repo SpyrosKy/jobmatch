@@ -1,40 +1,38 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
 const missionModel = require("../models/missionmodel");
-const entrepriseModel = require("../models/entreprisemodel")
+const entrepriseModel = require("../models/entreprisemodel");
 
 router.get("/create/:id", async (req, res) => {
-    try {
-      res.render("missions/create");
-    } catch (err) {
-      next(err);
-    }
+  try {
+      res.render("missions/create", { idEntreprise: req.params.id});
+  } catch (err) {
+    next(err);
+  }
 });
 
+router.post("/create/:id", (req, res, next) => {
+    const entreprise = req.params.id;
+    console.log(entreprise);
+    
 
-router.post("/create", (req, res, next) => {
-    const entrepriseId = req.params.id
+  const { category, description, location, date_deb, date_fin } = req.body;
 
-    const { category, description, location,date_deb,date_fin } = req.body;
-  
-    missionModel
-      .create({
-          category,
-          description,
-          location,
-          date_deb,
-          date_fin,
-          entrepriseId,
+  missionModel
+    .create({
+      category,
+      description,
+      location,
+      date_deb,
+      date_fin,
+      entreprise
+    })
+    .then((newMission) => {
+      console.log(newMission);
+      req.flash("success", "Mission successfully created");
+      res.redirect(`/entreprises/profil/${newMission.entreprise}`);
+    })
+    .catch(next);
+});
 
-      })
-      .then(() => {
-        req.flash("success", "artist successfully created");
-        res.redirect("/profil/"+ req.params.id);
-      })
-      .catch(next);
-  });
-  
-
-
-
-module.exports=router
+module.exports = router;

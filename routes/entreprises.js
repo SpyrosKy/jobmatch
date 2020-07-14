@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const entrepriseModel = require("../models/entreprisemodel");
+const missionModel = require("../models/missionmodel");
 const e = require("express");
 
 /* All Routes are Prefixed with /entreprises/ */
@@ -21,11 +22,11 @@ function formatEntrepriseInfos(infos) {
     name,
     email,
     password,
-    address:{ 
-    street,
-    city,
-    zipcode
-    }
+    address: {
+      street,
+      city,
+      zipcode,
+    },
   };
 }
 
@@ -47,14 +48,10 @@ router.get("/signupEnt", async (req, res) => {
   }
 });
 
-
 router.post("/signupEnt", (req, res, next) => {
-  
   const newEntreprise = formatEntrepriseInfos(req.body);
   entrepriseModel
-    .create(
-      newEntreprise
-    )
+    .create(newEntreprise)
     .then((dbRes) => {
       console.log(">>>>", dbRes);
 
@@ -64,11 +61,14 @@ router.post("/signupEnt", (req, res, next) => {
     .catch(next);
 });
 
-
-router.get("/profil/:id", async (req, res) => {
+router.get("/profil/:id", async (req, res, next) => {
   try {
-    const profil = await entrepriseModel.findById(req.params.id)
-    res.render("entreprises/profil", profil);
+    const profil = await entrepriseModel.findById(req.params.id);
+
+    const missions = await missionModel.find({ entreprise: req.params.id })
+
+    console.log("here ======>", missions);
+    res.render("entreprises/profil", { profil, missions });
   } catch (err) {
     next(err);
   }
@@ -80,7 +80,7 @@ router.get("/update/:id", async (req, res) => {
   try {
     const entreprise = await entrepriseModel.findById(req.params.id);
     console.log(entreprise);
-    
+
     res.render("entreprises/update", entreprise);
   } catch (err) {
     res.render("/error");
@@ -89,15 +89,18 @@ router.get("/update/:id", async (req, res) => {
 
 router.post("/update/:id", async (req, res) => {
   try {
-    await entrepriseModel.findByIdAndUpdate(req.params.id, formatEntrepriseInfos(req.body));
-    console.log(req.body)
+    await entrepriseModel.findByIdAndUpdate(
+      req.params.id,
+      formatEntrepriseInfos(req.body)
+    );
+    console.log(req.body);
     res.redirect("/entreprises/profil/" + req.params.id);
   } catch (err) {
     res.json(err);
   }
 });
 
-//DELETE 
+//DELETE
 
 router.get("/delete/:id", (req, res, next) => {
   entrepriseModel.findByIdAndDelete(req.params.id).then((dbres) => {
@@ -105,6 +108,5 @@ router.get("/delete/:id", (req, res, next) => {
     res.redirect("/");
   });
 });
-
 
 module.exports = router;
