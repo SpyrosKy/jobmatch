@@ -75,7 +75,6 @@ router.post("/signin", (req, res, next) => {
     .catch(next);
 });
 
-// action::Logout
 
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {

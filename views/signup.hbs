@@ -1,14 +1,15 @@
 <div class="row">
   <div class="col-md-4 offset-md-4">
-    <form action="/users/create" method="post" enctype="multipart/form-data">
+    <form action="/users/new" method="post">
       <h1>Create your user profile</h1>
       <div class="form-group">
         <label for="firstname">Firstame</label>
-        <input name="firstname" type="text" class="form-control" id="firstname" placeholder="John" required>
+        <input name="firstname" type="text" class="form-control" id="firstname" placeholder="John" value="chakib"
+          required>
       </div>
       <div class="form-group">
         <label for="lastname">Lastname</label>
-        <input name="lastname" type="text" class="form-control" id="lastname" placeholder=" Doe" required>
+        <input name="lastname" type="text" class="form-control" id="lastname" placeholder=" Doe" value="B" required>
       </div>
       <div class="form-group">
         <label for="inputCategory">Category</label>
@@ -26,30 +27,20 @@
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="inputEmail4">Email</label>
-          <input name="email" type="email" class="form-control" id="inputEmail4">
+          <input name="email" type="email" class="form-control" id="inputEmail4" value="aa@bb.com" required>
         </div>
         <div class="form-group col-md-6">
           <label for="inputPassword4">Password</label>
-          <input name="password" type="password" class="form-control" id="inputPassword4">
+          <input name="password" type="password" class="form-control" id="inputPassword4" value="123" required>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="inputAddress">Address</label>
-        <input name="streetname" type="text" class="form-control" id="inputAddress" placeholder="1234 Main St">
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
           <label for="inputCity">City</label>
-          <input name="cityname" type="text" class="form-control" id="inputCity">
-        </div>
-
-        <div class="form-group col-md-6">
-          <label for="inputZip">Zip Code</label>
-          <input name="zipcode" type="text" class="form-control" id="inputZip">
+          <input name="cityname" type="text" class="form-control" id="inputCity" value="South Central">
         </div>
       </div>
-
-      <button type="submit" class="btn btn-primary">Sign up</button>
+      <button class="btn btn-primary">Sign up</button>
     </form>
 
   </div>
