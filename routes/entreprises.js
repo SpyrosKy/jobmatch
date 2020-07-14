@@ -30,6 +30,15 @@ function formatEntrepriseInfos(infos) {
   };
 }
 
+router.get("/profilAll", async (req, res,next) => {
+  try {
+    const profil= await entrepriseModel.find()
+    res.render("entreprises/profilAll",{profil});
+  } catch (err) {
+    next(err);
+  }
+});
+
 router.get("/signinEnt", async (req, res) => {
   try {
     res.render("entreprises/signinEnt");
@@ -106,6 +115,13 @@ router.get("/delete/:id", (req, res, next) => {
   entrepriseModel.findByIdAndDelete(req.params.id).then((dbres) => {
     req.flash("success", "Entreprise succesfully deleted");
     res.redirect("/");
+  });
+});
+
+router.get("/deleteAdmin/:id", (req, res, next) => {
+  entrepriseModel.findByIdAndDelete(req.params.id).then((dbres) => {
+    req.flash("success", "Entreprise succesfully deleted");
+    res.redirect("/entreprises/profilAll");
   });
 });
 
