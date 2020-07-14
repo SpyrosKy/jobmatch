@@ -26,8 +26,8 @@ const missionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "entreprisemodel",
   },
-  date_deb: { type: Date, default: "Date.now()" },
-  date_fin: { type: Date, default: "Date.now()" },
+  date_deb: { type: Date},
+  date_fin: { type: Date},
 });
 
 const missionModel = mongoose.model("Mission", missionSchema);

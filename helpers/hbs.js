@@ -3,6 +3,10 @@ const moment = require("moment");
 
 // CUSTOM HELPERS
 
+hbs.registerHelper("format-date", function (date) {
+  return moment(date).format("DD-MM-YYYY");
+});
+
 hbs.registerHelper("toJSON", (val) => JSON.stringify(val));
 
 // function below: add the ternary operator functionnality to .hbs files

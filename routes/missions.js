@@ -5,14 +5,19 @@ const entrepriseModel = require("../models/entreprisemodel");
 
 router.get("/create/:id", async (req, res) => {
   try {
-    res.render("missions/create");
+
+      res.render("missions/create", { idEntreprise: req.params.id});
+
   } catch (err) {
     next(err);
   }
 });
 
-router.post("/create", (req, res, next) => {
-  const entrepriseId = req.params.id;
+
+router.post("/create/:id", (req, res, next) => {
+    const entreprise = req.params.id;
+    console.log(entreprise);
+
 
   const { category, description, location, date_deb, date_fin } = req.body;
 
@@ -23,11 +28,14 @@ router.post("/create", (req, res, next) => {
       location,
       date_deb,
       date_fin,
-      entrepriseId,
+
+      entreprise
     })
-    .then(() => {
-      req.flash("success", "artist successfully created");
-      res.redirect("/profil/" + req.params.id);
+    .then((newMission) => {
+      console.log(newMission);
+      req.flash("success", "Mission successfully created");
+      res.redirect(`/entreprises/profil/${newMission.entreprise}`);
+
     })
     .catch(next);
 });
