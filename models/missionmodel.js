@@ -3,13 +3,24 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 const missionSchema = new Schema({
-    description: String,
-    note:Number,
+  description: String,
+  note: Number,
+  category: {
+    type: String,
+    enum: [
+      "bartender",
+      "housekeeper",
+      "receptionist",
+      "waiter",
+      "chef",
+      "sommelier",
+      "manager",
+    ],
+  },
 
   user: {
     type: Schema.Types.ObjectId,
-      ref: "usermodel",
-    
+    ref: "usermodel",
   },
   entreprise: {
     type: Schema.Types.ObjectId,
@@ -19,6 +30,6 @@ const missionSchema = new Schema({
   date_fin: { type: Date, default: "Date.now()" },
 });
 
-const artistModel = mongoose.model("Artist", artistSchema);
+const missionModel = mongoose.model("Mission", missionSchema);
 
-module.exports = artistModel;
+module.exports = missionModel;
