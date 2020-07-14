@@ -18,23 +18,19 @@ const userSchema = new Schema({
       "sommelier",
       "manager",
     ],
-    required: true,
-  },
-  name: {
-    type: String,
-    required: true,
+    //required: true,
   },
   firstname: {
     type: String,
-    required: true,
+    //required: true,
   },
   lastname: {
     type: String,
-    required: true,
+    //required: true,
   },
   email: {
     type: String,
-    required: true,
+    //required: true,
   },
   password: {
     type: String,
@@ -47,20 +43,13 @@ const userSchema = new Schema({
   },
   description: {
     type: String,
-    required: true,
+    //required: true,
   },
-  address: {
-    streetname: { type: String, required: true },
-    cityname: {
-      type: String,
-      required: true,
-    },
-    zipcode: { type: Number, required: true },
+  cityname: {
+    type: String,
+    // required: true,
   },
-  price: {
-    type: Number,
-    required: true,
-  },
+  price: Number,
   rateavg: Number,
   missions: {
     type: [Schema.Types.ObjectId],
