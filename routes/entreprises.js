@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 const entrepriseModel = require("../models/entreprisemodel");
+const e = require("express");
 
 /* All Routes are Prefixed with /entreprises/ */
 
@@ -36,6 +37,8 @@ router.get("/signinEnt", async (req, res) => {
   }
 });
 
+//CREATE
+
 router.get("/signupEnt", async (req, res) => {
   try {
     res.render("entreprises/signupEnt");
@@ -68,5 +71,38 @@ router.get("/profil/:id", async (req, res) => {
     next(err);
   }
 });
+
+//UPDATE
+
+router.get("/update/:id", async (req, res) => {
+  try {
+    const entreprise = await entrepriseModel.findById(req.params.id);
+    console.log(entreprise);
+    
+    res.render("entreprises/update", entreprise);
+  } catch (err) {
+    res.render("/error");
+  }
+});
+
+router.post("/update/:id", async (req, res) => {
+  try {
+    await entrepriseModel.findByIdAndUpdate(req.params.id, formatEntrepriseInfos(req.body));
+    console.log(req.body)
+    res.redirect("/entreprises/profil/" + req.params.id);
+  } catch (err) {
+    res.json(err);
+  }
+});
+
+//DELETE 
+
+router.get("/delete/:id", (req, res, next) => {
+  entrepriseModel.findByIdAndDelete(req.params.id).then((dbres) => {
+    req.flash("success", "Entreprise succesfully deleted");
+    res.redirect("/");
+  });
+});
+
 
 module.exports = router;
