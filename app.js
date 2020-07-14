@@ -41,13 +41,6 @@ if (dev_mode === true) {
 app.use(require("./middlewares/exposeLoginStatus"));
 app.use(require("./middlewares/exposeFlashMessage"));
 
-// ROUTING
-app.use("/", require("./routes"));
-app.use("/entreprises", require("./routes/entreprise"));
-app.use("/missions", require("./routes/mission")); */
-app.use("/users", require("./routes/users"));
-// app.use("/auth", require("./routes/auth"));
-
 // app.locals.isLoggedIn = true;
 // app.locals.isAdmin = true;
 // app.locals.currentUser = {
@@ -59,7 +52,7 @@ app.use("/users", require("./routes/users"));
 app.use("/", require("./routes"));
 app.use("/entreprises", require("./routes/entreprises"));
 app.use("/missions", require("./routes/missions"));
+app.use("/users", require("./routes/users"));
 //("/", require("./routes/auth"))
-//app.use("/users", require("./routes/users"));
 
 module.exports = app;
