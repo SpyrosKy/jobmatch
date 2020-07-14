@@ -7,7 +7,8 @@ const express = require("express");
 const app = express();
 const hbs = require("hbs");
 const path = require("path");
-const flash = require("connect-flash"); // designed to keep messages between 2 http request/response cycles
+const flash = require("connect-flash");
+const dev_mode = true; // designed to keep messages between 2 http request/response cycles
 const session = require("express-session");
 
 // INITAL CONFIG
@@ -46,7 +47,13 @@ app.use(flash());
 //app.use(require("./middlewares/exposeLoginStatus"));
 
 // BELOW => DEV MODE !!!!! TO AVOID LOGIN/LOGOUT INFERNO
+if (dev_mode === true) {
+  app.use(require("./middlewares/devMode")); // triggers dev mode during dev phase
+  app.use(require("./middlewares/debugSessionInfos")); // displays session debug
+}
 
+app.use(require("./middlewares/exposeLoginStatus"));
+app.use(require("./middlewares/exposeFlashMessage"));
 // app.locals.isLoggedIn = true;
 // app.locals.isAdmin = true;
 // app.locals.currentUser = {
@@ -56,9 +63,10 @@ app.use(flash());
 
 // ROUTING
 app.use("/", require("./routes"));
-app.use("/entreprises", require("./routes/entreprise"));
-app.use("/missions", require("./routes/mission"));
-app.use("/users", require("./routes/users"));
+app.use("/entreprises", require("./routes/entreprises"));
+app.use("/missions", require("./routes/missions"));
+//("/", require("./routes/auth"))
+//app.use("/users", require("./routes/users"));
 
 
 // export the app (check the import @ ./bin/www)
