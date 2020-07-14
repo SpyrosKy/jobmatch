@@ -75,6 +75,13 @@ router.post("/update/:id", (req, res, next) => {
   userModel.findByIdAndUpdate(req.params.id, formatUserInfos(req.body));
 });
 
+router.get("/:id/missions", (req, res, next) => {
+  missionModel
+    .find()
+    .then((allMissions) => res.render("missions/missionsAll", allMissions))
+    .catch(next);
+});
+
 // router.get("/:id", (req, res, next) => {
 //   userModel
 //     .findById(req.params.id)
