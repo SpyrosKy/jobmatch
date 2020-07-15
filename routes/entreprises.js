@@ -84,6 +84,8 @@ router.post("/signupEnt", (req, res, next) => {
     });
   }
 });
+console.log("hello");
+
 // entrepriseModel
 //   .create(newEntreprise)
 //   .then((dbRes) => {
