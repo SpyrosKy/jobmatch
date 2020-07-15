@@ -1,8 +1,9 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const entrepriseModel = require("../models/entreprisemodel");
 const missionModel = require("../models/missionmodel");
 const e = require("express");
+const bcrypt = require("bcrypt");
 
 /* All Routes are Prefixed with /entreprises/ */
 
@@ -59,16 +60,92 @@ router.get("/signup", async (req, res) => {
 
 router.post("/signup", (req, res, next) => {
   const newEntreprise = formatEntrepriseInfos(req.body);
-  entrepriseModel
-    .create(newEntreprise)
-    .then((dbRes) => {
-      console.log(">>>>", dbRes);
 
-      req.flash("success", "entreprise successfully created");
-      res.redirect(`/entreprises/profil/${dbRes.id}`);
+  if (!newEntreprise.email || !newEntreprise.password) {
+    req.flash("error", "no empty fields here please");
+    return res.redirect("entreprises/signupEnt");
+  } else {
+    entrepriseModel
+      .findOne({ email: newEntreprise.email })
+      .then((dbRes) => {
+        if (dbRes) {
+          // si dbRes n'est pas null
+          req.flash("error", "sorry, email is already taken :/");
+          return res.redirect("entreprises/signupEnt");
+        }
+
+        const salt = bcrypt.genSaltSync(10); // https://en.wikipedia.org/wiki/Salt_(cryptography)
+        const hashed = bcrypt.hashSync(newEntreprise.password, salt);
+        // generates a unique random hashed password
+        newEntreprise.password = hashed; // new user is ready for db
+
+        entrepriseModel
+          .create(newEntreprise)
+          .then((dbRes) => res.redirect(`/entreprises/profil/${dbRes.id}`))
+          .catch(next);
+      })
+  
+  }
+});
+  // entrepriseModel
+  //   .create(newEntreprise)
+  //   .then((dbRes) => {
+
+  //     req.flash("success", "entreprise successfully created");
+  //     res.redirect(`/entreprises/profil/${dbRes.id}`);
+  //   })
+  //   .catch(next);
+
+
+router.post("/signinEnt", (req, res, next) => {
+
+  console.log("in the signin route");
+  
+  const entreprise = req.body;
+  console.log(entreprise);
+  
+
+  if (!entreprise.email || !entreprise.password) {
+    // one or more field is missing
+    req.flash("error", "wrong credentials");
+    console.log("missing data");
+    
+    return res.redirect("/entreprises/signinEnt");
+  }
+
+  entrepriseModel
+    .findOne({ email: entreprise.email })
+    .then((dbRes) => {
+      if (!dbRes) {
+        // no user found with this email
+        req.flash("error", "wrong credentials");
+        console.log("in the wrong credentials");
+        
+        return res.redirect("/entreprises/signinEnt");
+      }
+      // user has been found in DB !
+      if (bcrypt.compareSync(entreprise.password, dbRes.password)) {
+        // encryption says : password match success
+        const { _doc: clone } = { ...dbRes }; // make a clone of db user
+
+        delete clone.password; // remove password from clone
+        // console.log(clone);
+
+        req.session.currentUser = clone; // user is now in session... until session.destroy
+        console.log("succesfully signin");
+        
+        return res.redirect("/entreprises/profil/" + dbRes.id);
+      } else {
+        console.log("wrong credentials again");
+        
+        // encrypted password match failed
+        req.flash("error", "wrong credentials");
+        return res.redirect("/entreprises/signinEnt");
+      }
     })
     .catch(next);
 });
+
 
 router.get("/profil/:id", async (req, res, next) => {
   try {
@@ -118,10 +195,9 @@ router.get("/delete/:id", (req, res, next) => {
   });
 });
 
-router.get("/deleteAdmin/:id", (req, res, next) => {
-  entrepriseModel.findByIdAndDelete(req.params.id).then((dbres) => {
-    req.flash("success", "Entreprise succesfully deleted");
-    res.redirect("/entreprises/profilAll");
+router.get("/logout", (req, res) => {
+  req.session.destroy(() => {
+    res.redirect("/");
   });
 });
 

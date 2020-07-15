@@ -1,5 +1,5 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const missionModel = require("../models/missionmodel");
 const entrepriseModel = require("../models/entreprisemodel");
 
@@ -61,7 +61,7 @@ router.get("/update/:id", (req, res, next) => {
 
 router.post("/update/:id", async (req, res, next) => {
   try {
-    // const entrepriseId = await missionModel.find({ entreprise: req.params.id });
+
     const updatedMission = await missionModel.findByIdAndUpdate(
       req.params.id,
       req.body
