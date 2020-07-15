@@ -30,7 +30,6 @@
     </div>
 
     <h5 id="create-mission" class="form-text text-white">Create a mission <a href="/missions/create/{{profil.id}}"
-
         class="btn btn-primary"">Create a mission</a></h5>
 
 
@@ -59,9 +58,9 @@
                 <td>{{format-date this.date_deb}}</td>
                 <td>{{format-date this.date_fin}}</td>
                 <td>{{this.description}}</td>
-                <td><a class="" href="/mission/{{this._id}}"><i class="fas fa-search"></i></a></td>
-                <td> <a class="fa fa-pen fa-lg" href="/mission/update/{{this._id}}"></a></td>
-                <td> <a class="" href="/mission/delete/{{this._id}}"><i class="fas fa-trash-alt"></i></a></td>
+                <td><a class="" href="/missions/{{this._id}}"><i class="fas fa-search"></i></a></td>
+                <td> <a class="fa fa-pen fa-lg" href="/missions/update/{{this._id}}"></a></td>
+                <td> <a class="" href="/missions/delete/{{this._id}}"><i class="fas fa-trash-alt"></i></a></td>
 
 
               </tr>

@@ -54,7 +54,7 @@ const userSchema = new Schema({
   rateavg: Number,
   missions: {
     type: [Schema.Types.ObjectId],
-    ref: "missionmodel",
+    ref: "Mission",
   },
 });
 

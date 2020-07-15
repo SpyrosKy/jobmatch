@@ -20,11 +20,11 @@ const missionSchema = new Schema({
   location: String,
   user: {
     type: Schema.Types.ObjectId,
-    ref: "usermodel",
+    ref: "User",
   },
   entreprise: {
     type: Schema.Types.ObjectId,
-    ref: "entreprisemodel",
+    ref: "Entreprise",
   },
   date_deb: { type: Date },
   date_fin: { type: Date },

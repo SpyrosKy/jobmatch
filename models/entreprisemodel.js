@@ -2,19 +2,18 @@ const mongoose = require("mongoose");
 
 const Schema = mongoose.Schema;
 
-
 const entrepriseSchema = new Schema({
-    name: String,
+  name: String,
   role: {
-    type:String,
-    default: "entreprise"
+    type: String,
+    default: "entreprise",
   },
-    email: String,
-    password:String,
+  email: String,
+  password: String,
   address: {
-      street: String,
-      city: String,
-      zipcode: Number,
+    street: String,
+    city: String,
+    zipcode: Number,
   },
 });
 
