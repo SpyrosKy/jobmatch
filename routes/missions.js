@@ -3,6 +3,13 @@ var router = express.Router();
 const missionModel = require("../models/missionmodel");
 const entrepriseModel = require("../models/entreprisemodel");
 
+router.get("/missionsAll", (req, res, next) => {
+  missionModel
+    .find()
+    .then((allMissions) => res.render("missions/missionsAll", {allMissions}))
+    .catch(next);
+});
+
 router.get("/create/:id", async (req, res) => {
   try {
       res.render("missions/create", { idEntreprise: req.params.id});

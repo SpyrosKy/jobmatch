@@ -26,6 +26,7 @@ header {
   background-size: cover;
   height: 90vh;
   margin: 0;
+  background-image: url("./../images/hotel.jpg");
   
 }
 
@@ -45,6 +46,22 @@ header {
 }
 
 .div-titre-btn {
-  margin-right: 10%;
+  margin-right: 50%;
   margin-top: 15%;
+}
+
+.all-cards{
+  display: flex;
+  justify-content: space-evenly;
+  flex-wrap: wrap;
+  
+}
+
+.one-card{
+  margin-bottom: 15px;
+
+}
+
+.one-card:hover{
+  
 }

@@ -1,0 +1,12 @@
+<div class="container all-cards">
+{{#each allUsers}}
+<div class="card one-card" style="width: 18rem;">
+  <img src="/images/fakeprofil.jpeg" class="card-img-top" alt="...">
+  <div class="card-body">
+    <h5 class="card-title">{{firstname}} {{lastname}}</h5>
+    <p class="card-text">{{category}}</p>
+    <a href="./user-profile/{{id}}" class="btn btn-primary stretched-link">More..</a>
+  </div>
+</div>
+{{/each}}
+</div>
