@@ -190,6 +190,13 @@ router.get("/delete/:id", (req, res, next) => {
   });
 });
 
+router.get("/deleteAdmin/:id", (req, res, next) => {
+  entrepriseModel.findByIdAndDelete(req.params.id).then((dbres) => {
+    req.flash("success", "Entreprise succesfully deleted");
+    res.redirect("/entreprises/profilAll");
+  });
+});
+
 router.get("/logout", (req, res) => {
   req.session.destroy(() => {
     res.redirect("/");
