@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const entrepriseModel = require("../models/entreprisemodel");
 const missionModel = require("../models/missionmodel");
-const e = require("express");
 const bcrypt = require("bcrypt");
+const protectAdminRoute = require("../middlewares/protectAdminRoute");
 
 /* All Routes are Prefixed with /entreprises/ */
 
@@ -31,7 +31,7 @@ function formatEntrepriseInfos(infos) {
   };
 }
 
-router.get("/profilAll", async (req, res, next) => {
+router.get("/profilAll", protectAdminRoute, async (req, res, next) => {
   try {
     const profil = await entrepriseModel.find();
     res.render("entreprises/profilAll", { profil });

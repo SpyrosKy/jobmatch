@@ -8,7 +8,7 @@ const app = express();
 const hbs = require("hbs");
 const path = require("path");
 const flash = require("connect-flash");
-const dev_mode = true; // designed to keep messages between 2 http request/response cycles
+const dev_mode = false; // designed to keep messages between 2 http request/response cycles
 const session = require("express-session");
 
 // POST BODY PARSER

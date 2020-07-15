@@ -4,6 +4,8 @@ const userModel = require("../models/User");
 const entrepriseModel = require("../models/entreprisemodel");
 const missionModel = require("../models/missionmodel.js");
 const uploader = require("../config/cloudinary");
+const bcrypt = require("bcrypt");
+const protectPrivateRoute = require("../middlewares/protectPrivateRoute");
 
 function formatUserInfos(infos) {
   const {
@@ -37,7 +39,7 @@ function formatUserInfos(infos) {
 router.get("/all", (req, res, next) => {
   userModel
     .find()
-    .then((allUsers) => res.render("users/all-users", {allUsers}))
+    .then((allUsers) => res.render("users/all-users", { allUsers }))
     .catch(next);
 });
 
@@ -45,40 +47,99 @@ router.get("/new", (req, res) => {
   res.render("signup");
 });
 
-router.post("/new", (req, res, next) => {
-  const user = formatUserInfos(req.body);
+router.get("/signin", (req, res) => {
+  res.render("signin");
+});
+
+router.post("/signin", (req, res, next) => {
+  const user = req.body;
+  console.log(user);
+  if (!user.email || !user.password) {
+    // one or more field is missing
+    req.flash("error", "wrong credentials");
+    return res.redirect("/signin");
+  }
+
   userModel
-    .create(user)
-    .then((newUser) => {
-      console.log(newUser);
-      req.flash("success", "Your profile has been created !");
-      res.redirect(`/users/${newUser._id}`);
+    .findOne({ email: user.email })
+    .then((dbRes) => {
+      if (!dbRes) {
+        // no user found with this email
+        req.flash("error", "wrong credentials");
+        return res.redirect("/signin");
+      }
+      // user has been found in DB !
+      if (bcrypt.compareSync(user.password, dbRes.password)) {
+        // encryption says : password match success
+        const { _doc: clone } = { ...dbRes }; // make a clone of db user
+
+        delete clone.password; // remove password from clone
+        // console.log(clone);
+
+        req.session.currentUser = clone; // user is now in session... until session.destroy
+        return res.redirect("/users/" + dbRes.id);
+      } else {
+        // encrypted password match failed
+        req.flash("error", "wrong credentials");
+        return res.redirect("/signin");
+      }
     })
     .catch(next);
 });
 
-router.get("/:id", (req, res, next) => {
+router.post("/new", (req, res, next) => {
+  const user = formatUserInfos(req.body);
+
+  if (!user.email || !user.password) {
+    req.flash("error", "no empty fields here please");
+    return res.redirect("/signup");
+  } else {
+    userModel.findOne({ email: user.email }).then((dbRes) => {
+      if (dbRes) {
+        // si dbRes n'est pas null
+        req.flash("error", "sorry, email is already taken :/");
+        return res.redirect("/signup");
+      }
+
+      const salt = bcrypt.genSaltSync(10); // https://en.wikipedia.org/wiki/Salt_(cryptography)
+      const hashed = bcrypt.hashSync(user.password, salt);
+      // generates a unique random hashed password
+      user.password = hashed; // new user is ready for db
+
+      userModel
+        .create(user)
+        .then((newUser) => {
+          console.log(newUser);
+          req.flash("success", "Your profile has been created !");
+          res.redirect(`/users/${newUser._id}`);
+        })
+        .catch(next);
+    });
+  }
+});
+
+router.get("/:id", protectPrivateRoute, (req, res, next) => {
   userModel
     .findById(req.params.id)
     .then((user) => res.render("users/user-profile", { user }))
     .catch(next);
 });
 
-router.get("/update/:id", (req, res, next) => {
+router.get("/update/:id", protectPrivateRoute, (req, res, next) => {
   userModel
     .findById(req.params.id)
     .then((userProfile) => res.render("users/user-update", { userProfile }))
     .catch(next);
 });
 
-router.post("/update/:id", (req, res, next) => {
+router.post("/update/:id", protectPrivateRoute, (req, res, next) => {
   userModel
     .findByIdAndUpdate(req.params.id, formatUserInfos(req.body))
     .then(() => res.redirect("/users/" + req.params.id))
     .catch(next);
 });
 
-router.get("/:id/missions", (req, res, next) => {
+router.get("/:id/missions", protectPrivateRoute, (req, res, next) => {
   missionModel
     .find()
     .then((allMissions) => res.render("missions/missionsAll", allMissions))
