@@ -1,12 +1,12 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const missionModel = require("../models/missionmodel");
 const entrepriseModel = require("../models/entreprisemodel");
 
 router.get("/missionsAll", (req, res, next) => {
   missionModel
     .find()
-    .then((allMissions) => res.render("missions/missionsAll", {allMissions}))
+    .then((allMissions) => res.render("missions/missionsAll", { allMissions }))
     .catch(next);
 });
 
@@ -58,11 +58,27 @@ router.get("/update/:id", (req, res, next) => {
     .then((updateMission) => res.render("missions/update", { updateMission }))
     .catch(next);
 });
-router.post("/update/:id", (req, res, next) => {
-  missionModel
-    .findByIdAndUpdate(req.params.id, req.body)
-    .then((dbRes) => res.redirect("/entreprises/profil/" + dbRes.entreprise))
-    .catch(next);
+
+router.post("/update/:id", async (req, res, next) => {
+  try {
+
+    const updatedMission = await missionModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.redirect("/entreprises/profil/" + updatedMission.entreprise);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/delete/:id", async (req, res, next) => {
+  try {
+    const deletedMission = await missionModel.findByIdAndDelete(req.params.id);
+    res.redirect("/entreprises/profil/" + deletedMission.entreprise);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

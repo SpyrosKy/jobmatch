@@ -1,5 +1,5 @@
-var express = require("express");
-var router = express.Router();
+const express = require("express");
+const router = express.Router();
 const entrepriseModel = require("../models/entreprisemodel");
 const missionModel = require("../models/missionmodel");
 const e = require("express");
@@ -31,7 +31,16 @@ function formatEntrepriseInfos(infos) {
   };
 }
 
-router.get("/signinEnt", async (req, res) => {
+router.get("/profilAll", async (req, res, next) => {
+  try {
+    const profil = await entrepriseModel.find();
+    res.render("entreprises/profilAll", { profil });
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.get("/signin", async (req, res) => {
   try {
     res.render("entreprises/signinEnt");
   } catch (err) {
@@ -41,7 +50,7 @@ router.get("/signinEnt", async (req, res) => {
 
 //CREATE
 
-router.get("/signupEnt", async (req, res) => {
+router.get("/signup", async (req, res) => {
   try {
     res.render("entreprises/signupEnt");
   } catch (err) {
@@ -49,7 +58,7 @@ router.get("/signupEnt", async (req, res) => {
   }
 });
 
-router.post("/signupEnt", (req, res, next) => {
+router.post("/signup", (req, res, next) => {
   const newEntreprise = formatEntrepriseInfos(req.body);
 
   if (!newEntreprise.email || !newEntreprise.password) {
@@ -142,7 +151,7 @@ router.get("/profil/:id", async (req, res, next) => {
   try {
     const profil = await entrepriseModel.findById(req.params.id);
 
-    const missions = await missionModel.find({ entreprise: req.params.id })
+    const missions = await missionModel.find({ entreprise: req.params.id });
 
     console.log("here ======>", missions);
     res.render("entreprises/profil", { profil, missions });
