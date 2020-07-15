@@ -1,28 +1,31 @@
-<table class="table table-dark">
-  <thead>
-    <tr>
-      
-      <th scope="col">Name</th>
-      <th scope="col">Email</th>
-      <th scope="col">Address</th>
-      <th scope="col">City</th>
-      <th scope="col">Code</th>
-    </tr>
-  </thead>
-  {{#each profil}}
-  <tbody>
-    <tr>
-      
-      <td>{{this.name}}</td>
-      <td>{{this.email}}</td>
-      <td>{{this.address.street}}</td>
-      <td>{{this.address.city}}</td>
-      <td>{{this.address.zipcode}}</td>
-      <td><a class="" href="/entreprises/profil/{{this._id}}"><i class="fas fa-search"></i></a></td>
-      <td> <a class="fa fa-pen fa-lg" href="/entreprises/update/{{this._id}}"></a></td>
-      <td> <a class="" href="/entreprises/deleteAdmin/{{this._id}}"><i class="fas fa-trash-alt"></i></a></td>
-      
-    </tr>
-      </tbody>
-      {{/each}}
-</table>
+<div class="container">
+
+    <table class="table table-primary">
+        <thead>
+            <tr>
+
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+                <th scope="col">Address</th>
+                <th scope="col">City</th>
+                <th scope="col">Code</th>
+            </tr>
+        </thead>
+        {{#each profil}}
+        <tbody>
+            <tr>
+
+                <td>{{this.name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.address.street}}</td>
+                <td>{{this.address.city}}</td>
+                <td>{{this.address.zipcode}}</td>
+                <td><a class="" href="/entreprises/profil/{{this._id}}"><i class="fas fa-search"></i></a></td>
+                <td> <a class="fa fa-pen fa-lg" href="/entreprises/update/{{this._id}}"></a></td>
+                <td> <a class="" href="/entreprises/deleteAdmin/{{this._id}}"><i class="fas fa-trash-alt"></i></a></td>
+
+            </tr>
+        </tbody>
+        {{/each}}
+    </table>
+</div>

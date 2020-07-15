@@ -37,7 +37,7 @@ function formatUserInfos(infos) {
 router.get("/all", (req, res, next) => {
   userModel
     .find()
-    .then((allUsers) => res.render("users/all-users", allUsers))
+    .then((allUsers) => res.render("users/all-users", {allUsers}))
     .catch(next);
 });
 
