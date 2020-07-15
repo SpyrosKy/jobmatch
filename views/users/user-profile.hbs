@@ -1,9 +1,22 @@
+{{#if isEntreprise}}
+<h1>Candidate: {{user.firstname}} {{user.lastname}}</h1>
+<img src="{{user.picture}}" alt="Picture of {{user.firstname}} {{user.lastname}}">
+<h2>Role of the user: {{user.category}}</h2>
+<p>The candidate has {{user.missions.length}} missions</p>
+<p>City of candidate {{user.address.city}}!</p>
+
+<button>
+    <a href="mailto:ineedajob@user.com">Contact the candidate</a>
+</button>
+
+{{else}}
 <h1>hello {{user.firstname}} {{user.lastname}}</h1>
 
 <p>You have {{user.missions.length}} missions</p>
 <p>Need extra money ? Find a new mission near {{user.address.city}}!</p>
 <button>
-    <a href="/users/{{user.id}}/missions">Find missions</a>
+    <a href="/missions/missionsAll">Find missions</a>
 </button> {{!-- TODO, show all missions --}}
 
 <a href="/users/update/{{user.id}}">Update your profile</a>
+{{/if}}

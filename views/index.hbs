@@ -1,8 +1,13 @@
 <div class="index">
-<div class="div-titre-btn">
+    <div class="div-titre-btn">
 
-<h1 class="titre-index">Work when you want<br> Whenever you want</h1>
+        <h1 class="titre-index">Work when you want<br> Whenever you want</h1>
+        {{#if isLoggedIn}}
+        <a class="btn-index" href="/missions/missionsAll">Discover our offers</a>
+        {{else}}
+        <a class="btn-index" href="/signin">Discover our offers</a>
+        {{/if}}
 
-<a class="btn-index" href="./missions/missionsAll">Discover our offers</a>
-</div>
+
+    </div>
 </div>
