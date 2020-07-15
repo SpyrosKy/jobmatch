@@ -61,7 +61,7 @@ router.get("/update/:id", (req, res, next) => {
 router.post("/update/:id", (req, res, next) => {
   missionModel
     .findByIdAndUpdate(req.params.id, req.body)
-    .then(() => res.redirect("/entreprises/profil/" + req.params.id))
+    .then((dbRes) => res.redirect("/entreprises/profil/" + dbRes.entreprise))
     .catch(next);
 });
 
