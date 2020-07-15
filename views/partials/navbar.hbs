@@ -15,21 +15,30 @@
             <li class="nav-item">
                 <a class="nav-link" href="#">Contact</a>
             </li>
+            {{#if isEntreprise}}
             <li class="nav-item">
-                <a class="nav-link" href="/entreprises/signinEnt">Entreprise</a>
+                <a class="nav-link" href="/users/all">Candidates</a>
             </li>
+            {{/if}}
+            {{#unless isLoggedIn}}
+            <li class="nav-item">
+                <a class="nav-link" href="/entreprises/signinEnt">Entreprise lOGIN</a>
+            </li>
+
             <li class="nav-item">
                 <a class="nav-link" href="/signin">Log In</a>
             </li>
+            {{/unless}}
             {{#if isAdmin}}
             <li class="nav-item">
                 <a class="nav-link" href="/entreprises/profilAll">Clients</a>
             </li>
             {{/if}}
-
+            {{#if isLoggedIn}}
             <li class="nav-item">
                 <a class="nav-link" href="/entreprises/logout">Log out</a>
             </li>
+            {{/if}}
         </ul>
 
 
