@@ -1,6 +1,7 @@
 // const express = require("express"); // import express in this module
 // const router = new express.Router(); // create an app sub-module (router)
 // const userModel = require("../models/User");
+// const entrepriseModel = require("../models/entreprisemodel")
 // const bcrypt = require("bcrypt");
 
 // router.get("/signup", (req, res) => {
