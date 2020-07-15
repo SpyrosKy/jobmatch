@@ -40,7 +40,7 @@ router.get("/profilAll", async (req, res, next) => {
   }
 });
 
-router.get("/signin", async (req, res) => {
+router.get("/signinEnt", async (req, res) => {
   try {
     res.render("entreprises/signinEnt");
   } catch (err) {
@@ -50,7 +50,7 @@ router.get("/signin", async (req, res) => {
 
 //CREATE
 
-router.get("/signup", async (req, res) => {
+router.get("/signupEnt", async (req, res) => {
   try {
     res.render("entreprises/signupEnt");
   } catch (err) {
@@ -58,58 +58,54 @@ router.get("/signup", async (req, res) => {
   }
 });
 
-router.post("/signup", (req, res, next) => {
+router.post("/signupEnt", (req, res, next) => {
   const newEntreprise = formatEntrepriseInfos(req.body);
 
   if (!newEntreprise.email || !newEntreprise.password) {
     req.flash("error", "no empty fields here please");
-    return res.redirect("entreprises/signupEnt");
+    return res.redirect("/entreprises/signupEnt");
   } else {
-    entrepriseModel
-      .findOne({ email: newEntreprise.email })
-      .then((dbRes) => {
-        if (dbRes) {
-          // si dbRes n'est pas null
-          req.flash("error", "sorry, email is already taken :/");
-          return res.redirect("entreprises/signupEnt");
-        }
+    entrepriseModel.findOne({ email: newEntreprise.email }).then((dbRes) => {
+      if (dbRes) {
+        // si dbRes n'est pas null
+        req.flash("error", "sorry, email is already taken :/");
+        return res.redirect("/entreprises/signupEnt");
+      }
 
-        const salt = bcrypt.genSaltSync(10); // https://en.wikipedia.org/wiki/Salt_(cryptography)
-        const hashed = bcrypt.hashSync(newEntreprise.password, salt);
-        // generates a unique random hashed password
-        newEntreprise.password = hashed; // new user is ready for db
+      const salt = bcrypt.genSaltSync(10); // https://en.wikipedia.org/wiki/Salt_(cryptography)
+      const hashed = bcrypt.hashSync(newEntreprise.password, salt);
+      // generates a unique random hashed password
+      newEntreprise.password = hashed; // new user is ready for db
 
-        entrepriseModel
-          .create(newEntreprise)
-          .then((dbRes) => res.redirect(`/entreprises/profil/${dbRes.id}`))
-          .catch(next);
-      })
-  
+      entrepriseModel
+        .create(newEntreprise)
+        .then((dbRes) => res.redirect(`/entreprises/profil/${dbRes.id}`))
+        .catch(next);
+    });
   }
 });
-  // entrepriseModel
-  //   .create(newEntreprise)
-  //   .then((dbRes) => {
+console.log("hello");
 
-  //     req.flash("success", "entreprise successfully created");
-  //     res.redirect(`/entreprises/profil/${dbRes.id}`);
-  //   })
-  //   .catch(next);
+// entrepriseModel
+//   .create(newEntreprise)
+//   .then((dbRes) => {
 
+//     req.flash("success", "entreprise successfully created");
+//     res.redirect(`/entreprises/profil/${dbRes.id}`);
+//   })
+//   .catch(next);
 
 router.post("/signinEnt", (req, res, next) => {
-
   console.log("in the signin route");
-  
+
   const entreprise = req.body;
   console.log(entreprise);
-  
 
   if (!entreprise.email || !entreprise.password) {
     // one or more field is missing
     req.flash("error", "wrong credentials");
     console.log("missing data");
-    
+
     return res.redirect("/entreprises/signinEnt");
   }
 
@@ -120,7 +116,7 @@ router.post("/signinEnt", (req, res, next) => {
         // no user found with this email
         req.flash("error", "wrong credentials");
         console.log("in the wrong credentials");
-        
+
         return res.redirect("/entreprises/signinEnt");
       }
       // user has been found in DB !
@@ -133,11 +129,11 @@ router.post("/signinEnt", (req, res, next) => {
 
         req.session.currentUser = clone; // user is now in session... until session.destroy
         console.log("succesfully signin");
-        
+
         return res.redirect("/entreprises/profil/" + dbRes.id);
       } else {
         console.log("wrong credentials again");
-        
+
         // encrypted password match failed
         req.flash("error", "wrong credentials");
         return res.redirect("/entreprises/signinEnt");
@@ -145,7 +141,6 @@ router.post("/signinEnt", (req, res, next) => {
     })
     .catch(next);
 });
-
 
 router.get("/profil/:id", async (req, res, next) => {
   try {
