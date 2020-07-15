@@ -17,7 +17,7 @@ const missionSchema = new Schema({
       "manager",
     ],
   },
-
+  location: String,
   user: {
     type: Schema.Types.ObjectId,
     ref: "usermodel",
@@ -26,8 +26,8 @@ const missionSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "entreprisemodel",
   },
-  date_deb: { type: Date},
-  date_fin: { type: Date},
+  date_deb: { type: Date },
+  date_fin: { type: Date },
 });
 
 const missionModel = mongoose.model("Mission", missionSchema);

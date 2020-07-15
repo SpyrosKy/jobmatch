@@ -1,7 +1,35 @@
 const express = require("express");
 const router = express.Router();
 const userModel = require("../models/User");
+const entrepriseModel = require("../models/entreprisemodel");
+const missionModel = require("../models/missionmodel.js");
 const uploader = require("../config/cloudinary");
+
+function formatUserInfos(infos) {
+  const {
+    firstname,
+    lastname,
+    email,
+    category,
+    password,
+    street,
+    city,
+    zipcode,
+  } = infos;
+  // above : we extracted the key/values pairs out of req body
+  return {
+    firstname,
+    lastname,
+    password,
+    category,
+    email,
+    address: {
+      street,
+      city,
+      zipcode,
+    },
+  };
+}
 
 /* ALL ROUTES ARE PREFIXED WITH /USERS */
 
@@ -18,29 +46,42 @@ router.get("/new", (req, res) => {
 });
 
 router.post("/new", (req, res, next) => {
-  const { firstname, lastname, category, email, password, cityname } = req.body;
-
+  const user = formatUserInfos(req.body);
   userModel
-    .create({
-      firstname,
-      lastname,
-      category,
-      email,
-      password,
-      cityname,
-    })
+    .create(user)
     .then((newUser) => {
       console.log(newUser);
       req.flash("success", "Your profile has been created !");
-      res.redirect(`/users/user-profile/${newUser._id}`);
+      res.redirect(`/users/${newUser._id}`);
     })
     .catch(next);
 });
 
-router.get("/user-profile/:id", (req, res, next) => {
+router.get("/:id", (req, res, next) => {
   userModel
     .findById(req.params.id)
-    .then((user) => res.render("users/user-profile", {user} ))
+    .then((user) => res.render("users/user-profile", { user }))
+    .catch(next);
+});
+
+router.get("/update/:id", (req, res, next) => {
+  userModel
+    .findById(req.params.id)
+    .then((userProfile) => res.render("users/user-update", { userProfile }))
+    .catch(next);
+});
+
+router.post("/update/:id", (req, res, next) => {
+  userModel
+    .findByIdAndUpdate(req.params.id, formatUserInfos(req.body))
+    .then(() => res.redirect("/users/" + req.params.id))
+    .catch(next);
+});
+
+router.get("/:id/missions", (req, res, next) => {
+  missionModel
+    .find()
+    .then((allMissions) => res.render("missions/missionsAll", allMissions))
     .catch(next);
 });
 
