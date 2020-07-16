@@ -65,3 +65,7 @@ header {
 .one-card:hover{
   
 }
+
+.picture{
+  max-width: 300px;
+}
