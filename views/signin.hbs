@@ -13,14 +13,14 @@
                 <label for="exampleInputPassword1">Password</label>
                 <input name="password" type="password" class="form-control" id="exampleInputPassword1">
             </div>
+            <h6 style="color: red;">{{error_msg}}</h6>
 
             <button type="submit" class="btn btn-primary">Submit</button>
-            <h6 id="emailHelp" class="form-text text-white">You don't have an account yet? <a href="/users/new/"
+            <h6 id="emailHelp" class="form-text text-dark">You don't have an account yet? <a href="/users/new/"
                     class="btn btn-primary"">Sign
                     Up</a></h6>
 
         </form>
     </div>
 </div>
-<h2>{{warning_msg}}</h2>
-<h1>{{error_msg}}</h1>
+
