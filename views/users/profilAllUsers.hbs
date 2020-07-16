@@ -1,0 +1,31 @@
+<div class="container">
+
+    <table class="table table-primary">
+        <thead>
+            <tr>
+
+                <th scope="col">First name</th>
+                <th scope="col">Last name</th>
+                <th scope="col">Category</th>
+                <th scope="col">Email</th>
+                <th scope="col">Adresse</th>
+            </tr>
+        </thead>
+        {{#each profil}}
+        <tbody>
+            <tr>
+
+                <td>{{this.firstname}}</td>
+                <td>{{this.lastname}}</td>
+                <td>{{this.category}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.address.street}}, {{this.address.city}}, {{this.address.zipcode}}</td>
+                <td><a class="" href="/users/{{this._id}}"><i class="fas fa-search"></i></a></td>
+                <td> <a class="fa fa-pen fa-lg" href="/users/update/{{this._id}}"></a></td>
+                <td> <a class="" href="/users/delete/{{this._id}}"><i class="fas fa-trash-alt"></i></a></td>
+
+            </tr>
+        </tbody>
+        {{/each}}
+    </table>
+</div>

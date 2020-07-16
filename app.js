@@ -10,7 +10,7 @@ const path = require("path");
 const flash = require("connect-flash");
 const dev_mode = false; // designed to keep messages between 2 http request/response cycles
 const session = require("express-session");
-
+console.log("Je suis toto");
 // POST BODY PARSER
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

@@ -91,7 +91,7 @@ router.post("/signin", (req, res, next) => {
 
 router.post("/new", uploader.single("picture"), (req, res, next) => {
   const user = formatUserInfos(req.body);
-  console.log("yolo")
+  console.log("yolo");
   if (req.file) user.picture = req.file.path;
 
   if (!user.email || !user.password) {
