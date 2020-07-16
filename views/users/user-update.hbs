@@ -24,6 +24,24 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="inputCategory">Category</label>
+                <select name="category" id="inputCategory" class="form-control">
+                    <option>{{userProfile.category}}</option>
+                    <option value="bartender">Bar</option>
+                    <option value="housekeeper">Housekeeping</option>
+                    <option value="receptionist">Reception</option>
+                    <option value="waiter">Waiter</option>
+                    <option value="chef">Chef</option>
+                    <option value="sommelier">Sommelier</option>
+                    <option value="manager">Manager</option>
+                </select>
+
+            </div>
+
+
+
+
+            <div class="form-group">
                 <label for="street">Street</label>
                 <input type="text" name="street" class="form-control" id="street" placeholder="1234 Main St"
                     value="{{userProfile.address.street}}">
@@ -43,8 +61,17 @@
             <div class="form-row">
                 <div class="form-group col-md-6">
                     <label for="picture">Upload an image</label>
-                    <input type="file" name="picture" id="picture" class="form-control" value="{{userProfile.picture}}">
+                    <input type="file" name="picture" id="picture" class="form-control">
+
                 </div>
+
+                <div class="form-group col-md-6">
+
+                    <img id="image-preview" class="img preview" src="{{userProfile.picture}}"
+                        alt="{{userProfile.name}}'s' picture">
+                </div>
+
+
             </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>

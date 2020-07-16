@@ -66,3 +66,7 @@ header {
 .picture{
   max-width: 300px;
 }
+
+.img.preview {
+  max-width: 300px;
+}
