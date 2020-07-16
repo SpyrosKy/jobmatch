@@ -1,7 +1,7 @@
 require("dotenv").config();
 require("./config/mongodb");
 require("./helpers/hbs");
-
+console.log("Hello");
 // DEPENDENCIES
 const express = require("express");
 const app = express();
