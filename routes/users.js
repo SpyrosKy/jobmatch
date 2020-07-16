@@ -56,7 +56,7 @@ router.post("/signin", (req, res, next) => {
   console.log(user);
   if (!user.email || !user.password) {
     // one or more field is missing
-    req.flash("error", "wrong credentials");
+    req.flash("error", "Please fill all the fields.");
     return res.redirect("/signin");
   }
 
@@ -65,7 +65,7 @@ router.post("/signin", (req, res, next) => {
     .then((dbRes) => {
       if (!dbRes) {
         // no user found with this email
-        req.flash("error", "wrong credentials");
+        req.flash("error", "Wrong credentials! Please try again.");
         return res.redirect("/signin");
       }
       // user has been found in DB !
@@ -80,7 +80,7 @@ router.post("/signin", (req, res, next) => {
         return res.redirect("/users/" + dbRes.id);
       } else {
         // encrypted password match failed
-        req.flash("error", "wrong credentials");
+        req.flash("error", "Wrong credentials! Please try again.");
         return res.redirect("/signin");
       }
     })
@@ -91,13 +91,13 @@ router.post("/new", (req, res, next) => {
   const user = formatUserInfos(req.body);
 
   if (!user.email || !user.password) {
-    req.flash("error", "no empty fields here please");
+    req.flash("error", "Please fill all the fields.");
     return res.redirect("/signup");
   } else {
     userModel.findOne({ email: user.email }).then((dbRes) => {
       if (dbRes) {
         // si dbRes n'est pas null
-        req.flash("error", "sorry, email is already taken :/");
+        req.flash("error", "Sorry, email is already taken :/");
         return res.redirect("/signup");
       }
 
@@ -110,7 +110,7 @@ router.post("/new", (req, res, next) => {
         .create(user)
         .then((newUser) => {
           console.log(newUser);
-          req.flash("success", "Your profile has been created !");
+          req.flash("success", "Your profil has been created !");
           res.redirect(`/users/${newUser._id}`);
         })
         .catch(next);
