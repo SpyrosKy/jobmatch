@@ -13,7 +13,6 @@ function formatUserInfos(infos) {
     lastname,
     email,
     category,
-    picture,
     password,
     street,
     city,
@@ -24,7 +23,6 @@ function formatUserInfos(infos) {
     firstname,
     lastname,
     password,
-    picture,
     category,
     email,
     address: {
@@ -89,10 +87,8 @@ router.post("/signin", (req, res, next) => {
     .catch(next);
 });
 
-router.post("/new", uploader.single("picture"), (req, res, next) => {
+router.post("/new", (req, res, next) => {
   const user = formatUserInfos(req.body);
-
-  if (req.file) user.picture = req.file.path;
 
   if (!user.email || !user.password) {
     req.flash("error", "Please fill all the fields.");
@@ -136,20 +132,12 @@ router.get("/update/:id", protectPrivateRoute, (req, res, next) => {
     .catch(next);
 });
 
-router.post(
-  "/update/:id",
-  uploader.single("picture"),
-  protectPrivateRoute,
-  (req, res, next) => {
-    const updatedUser = req.body;
-    if (req.file) updatedUser.picture = req.file.path;
-
-    userModel
-      .findByIdAndUpdate(req.params.id, formatUserInfos(updatedUser))
-      .then(() => res.redirect("/users/" + req.params.id))
-      .catch(next);
-  }
-);
+router.post("/update/:id", protectPrivateRoute, (req, res, next) => {
+  userModel
+    .findByIdAndUpdate(req.params.id, formatUserInfos(req.body))
+    .then(() => res.redirect("/users/" + req.params.id))
+    .catch(next);
+});
 
 router.get("/:id/missions", protectPrivateRoute, (req, res, next) => {
   missionModel
