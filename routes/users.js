@@ -6,6 +6,7 @@ const missionModel = require("../models/missionmodel.js");
 const uploader = require("../config/cloudinary");
 const bcrypt = require("bcrypt");
 const protectPrivateRoute = require("../middlewares/protectPrivateRoute");
+const protectAdminRoute = require("../middlewares/protectAdminRoute");
 
 function formatUserInfos(infos) {
   const {
@@ -44,6 +45,17 @@ router.get("/all", (req, res, next) => {
     .then((allUsers) => res.render("users/all-users", { allUsers }))
     .catch(next);
 });
+
+
+router.get("/profilAllUsers", protectAdminRoute, async (req, res, next) => {
+  try {
+    const profil = await userModel.find();
+    res.render("users/profilAllUsers", { profil });
+  } catch (err) {
+    next(err);
+  }
+});
+
 
 router.get("/new", (req, res) => {
   res.render("signup");
@@ -144,6 +156,11 @@ router.post(
     const updatedUser = req.body;
     if (req.file) updatedUser.picture = req.file.path;
 
+    const salt = bcrypt.genSaltSync(10); // https://en.wikipedia.org/wiki/Salt_(cryptography)
+    const hashed = bcrypt.hashSync(updatedUser.password, salt);
+    // generates a unique random hashed password
+    updatedUser.password = hashed; // new user is ready for db
+
     userModel
       .findByIdAndUpdate(req.params.id, formatUserInfos(updatedUser))
       .then(() => res.redirect("/users/" + req.params.id))
@@ -156,6 +173,20 @@ router.get("/:id/missions", protectPrivateRoute, (req, res, next) => {
     .find()
     .then((allMissions) => res.render("missions/missionsAll", allMissions))
     .catch(next);
+});
+
+router.get("/delete/:id", (req, res, next) => {
+  userModel.findByIdAndDelete(req.params.id).then((dbres) => {
+    req.flash("success", "User succesfully deleted");
+    res.redirect("/");
+  });
+});
+
+router.get("/deleteAdmin/:id", (req, res, next) => {
+  userModel.findByIdAndDelete(req.params.id).then((dbres) => {
+    req.flash("success", "User succesfully deleted");
+    res.redirect("/users/profilAllUsers");
+  });
 });
 
 // router.get("/:id", (req, res, next) => {

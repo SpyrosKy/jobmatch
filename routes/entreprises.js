@@ -169,12 +169,19 @@ router.get("/update/:id", async (req, res) => {
 });
 
 router.post("/update/:id", async (req, res) => {
+  const entreprise = formatEntrepriseInfos(req.body)
+  const salt = bcrypt.genSaltSync(10); // https://en.wikipedia.org/wiki/Salt_(cryptography)
+  const hashed = bcrypt.hashSync(entreprise.password, salt);
+  // generates a unique random hashed password
+  entreprise.password = hashed; // new u
+  
   try {
-    await entrepriseModel.findByIdAndUpdate(
+    await
+      entrepriseModel.findByIdAndUpdate(
       req.params.id,
-      formatEntrepriseInfos(req.body)
+      entreprise
     );
-    console.log(req.body);
+   
     res.redirect("/entreprises/profil/" + req.params.id);
   } catch (err) {
     res.json(err);
