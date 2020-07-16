@@ -62,13 +62,13 @@ router.post("/signupEnt", (req, res, next) => {
   const newEntreprise = formatEntrepriseInfos(req.body);
 
   if (!newEntreprise.email || !newEntreprise.password) {
-    req.flash("error", "no empty fields here please");
+    req.flash("error", "Please fill all the fields.");
     return res.redirect("/entreprises/signupEnt");
   } else {
     entrepriseModel.findOne({ email: newEntreprise.email }).then((dbRes) => {
       if (dbRes) {
         // si dbRes n'est pas null
-        req.flash("error", "sorry, email is already taken :/");
+        req.flash("error", "Sorry, email is already taken :/");
         return res.redirect("/entreprises/signupEnt");
       }
 
@@ -79,7 +79,7 @@ router.post("/signupEnt", (req, res, next) => {
 
       entrepriseModel
         .create(newEntreprise)
-        .then((dbRes) => res.redirect(`/entreprises/profil/${dbRes.id}`))
+        .then((dbRes) => res.redirect(`/entreprises/signinEnt`))
         .catch(next);
     });
   }
@@ -103,7 +103,7 @@ router.post("/signinEnt", (req, res, next) => {
 
   if (!entreprise.email || !entreprise.password) {
     // one or more field is missing
-    req.flash("error", "wrong credentials");
+    req.flash("error", "Wrong credentials! Please try again.");
     console.log("missing data");
 
     return res.redirect("/entreprises/signinEnt");
@@ -114,7 +114,7 @@ router.post("/signinEnt", (req, res, next) => {
     .then((dbRes) => {
       if (!dbRes) {
         // no user found with this email
-        req.flash("error", "wrong credentials");
+        req.flash("error", "Wrong credentials! Please try again.");
         console.log("in the wrong credentials");
 
         return res.redirect("/entreprises/signinEnt");
@@ -135,7 +135,7 @@ router.post("/signinEnt", (req, res, next) => {
         console.log("wrong credentials again");
 
         // encrypted password match failed
-        req.flash("error", "wrong credentials");
+        req.flash("error", "Wrong credentials! Please try again.");
         return res.redirect("/entreprises/signinEnt");
       }
     })
