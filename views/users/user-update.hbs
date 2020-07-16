@@ -1,58 +1,7 @@
-{{!-- <div class="row">
-    <div class="col-md-4 offset-md-4">
-        <form action="/users/new" method="post">
-            <h1>Update your user profile</h1>
-            <div class="form-group">
-                <label for="firstname">Firstame</label>
-                <input name="firstname" type="text" class="form-control" id="firstname" placeholder="John"
-                    value="{{userProfile.firstname}}" required>
-            </div>
-            <div class="form-group">
-                <label for="lastname">Lastname</label>
-                <input name="lastname" type="text" class="form-control" id="lastname" placeholder=" Doe"
-                    value="{{userProfile.lastname}}" required>
-            </div>
-            <div class="form-group">
-                <label for="inputCategory">Category</label>
-                <select name="category" id="inputCategory" class="form-control">
-                    <option>{{userProfile.category}}</option>
-                    <option value="bartender">Bar</option>
-                    <option value="housekeeper">Housekeeping</option>
-                    <option value="receptionist">Reception</option>
-                    <option value="waiter">Waiter</option>
-                    <option value="chef">Chef</option>
-                    <option value="sommelier">Sommelier</option>
-                    <option value="manager">Manager</option>
-                </select>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputEmail4">Email</label>
-                    <input name="email" type="email" class="form-control" id="inputEmail4" value="{{userProfile.email}}"
-                        required>
-                </div>
-                <div class="form-group col-md-6">
-                    <label for="inputPassword4">Password</label>
-                    <input name="password" type="password" class="form-control" id="inputPassword4"
-                        value="{{userProfile.password}}" required>
-                </div>
-            </div>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="inputCity">City</label>
-                    <input name="cityname" type="text" class="form-control" id="inputCity"
-                        value="{{userProfile.cityname}}">
-                </div>
-            </div>
-            <button class="btn btn-primary">Update</button>
-        </form>
-
-    </div>
-</div> --}}
-
 <div class="row">
     <div class="col-md-4 offset-md-4">
-        <form action="/users/update/{{userProfile.id}}" method="post">
+        <form action="/users/update/{{userProfile.id}}" method="post" enctype="multipart/form-data">
+
             <div class="form-group">
                 <label for="firstname">First Name</label>
                 <input type="text" name="firstname" class="form-control" id="firstname" placeholder=""
@@ -91,7 +40,12 @@
                         value="{{userProfile.address.zipcode}}">
                 </div>
             </div>
-
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="picture">Upload an image</label>
+                    <input type="file" name="picture" id="picture" class="form-control">
+                </div>
+            </div>
             <button type="submit" class="btn btn-primary">Update</button>
         </form>
 

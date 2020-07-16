@@ -132,12 +132,17 @@ router.get("/update/:id", protectPrivateRoute, (req, res, next) => {
     .catch(next);
 });
 
-router.post("/update/:id", protectPrivateRoute, (req, res, next) => {
-  userModel
-    .findByIdAndUpdate(req.params.id, formatUserInfos(req.body))
-    .then(() => res.redirect("/users/" + req.params.id))
-    .catch(next);
-});
+router.post(
+  "/update/:id",
+  uploader.single("picture"),
+  protectPrivateRoute,
+  (req, res, next) => {
+    userModel
+      .findByIdAndUpdate(req.params.id, formatUserInfos(req.body))
+      .then(() => res.redirect("/users/" + req.params.id))
+      .catch(next);
+  }
+);
 
 router.get("/:id/missions", protectPrivateRoute, (req, res, next) => {
   missionModel
