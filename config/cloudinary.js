@@ -1,5 +1,4 @@
 const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const multer = require("multer");
 
 cloudinary.config({
@@ -8,12 +7,31 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET,
 });
 
-const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "user-pictures",
+// Multer storage engine streaming the uploaded file straight to Cloudinary.
+// Replaces the unmaintained `multer-storage-cloudinary` package, whose peer
+// dependency was pinned to the vulnerable cloudinary 1.x line.
+const storage = {
+  _handleFile(req, file, callback) {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "user-pictures" },
+      (err, resp) => {
+        if (err) return callback(err);
+        // `path` is what the routes read back as the picture URL
+        callback(null, {
+          path: resp.secure_url,
+          size: resp.bytes,
+          filename: resp.public_id,
+        });
+      }
+    );
+    file.stream.on("error", callback);
+    file.stream.pipe(stream);
   },
-});
+
+  _removeFile(req, file, callback) {
+    cloudinary.uploader.destroy(file.filename, { invalidate: true }, callback);
+  },
+};
 
 const fileUploader = multer({ storage });
 module.exports = fileUploader;
