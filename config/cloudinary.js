@@ -33,5 +33,8 @@ const storage = {
   },
 };
 
-const fileUploader = multer({ storage });
+// fieldArrayIndexLimit is opt-in (default Infinity): without it a field named
+// e.g. `a[999999999]` makes multer allocate a huge array (CVE-2026-82333).
+// No form posts array-indexed fields, so a small bound is safe.
+const fileUploader = multer({ storage, limits: { fieldArrayIndexLimit: 100 } });
 module.exports = fileUploader;
